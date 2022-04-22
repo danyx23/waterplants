@@ -103,9 +103,9 @@ if __name__ == "__main__":
     arguments = docopt(__doc__, version='waterplants V1')
     if platform.system()=='Windows':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    if arguments["onifwarmernow"]:
+    if arguments["on5minifwarmernow"]:
         asyncio.run(on_if_warmer_now(int(arguments["<temp>"]), arguments["-d"]))
-    elif arguments["onifwarmertoday"]:
+    elif arguments["on5minifwarmertoday"]:
         asyncio.run(on_if_warmer_today(int(arguments["<temp>"]), arguments["-d"]))
     elif arguments["on"]:
         asyncio.run(on(arguments["-d"]))
