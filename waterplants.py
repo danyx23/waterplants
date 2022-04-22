@@ -5,6 +5,8 @@ Usage:
   waterplants.py off [-d <device>]
   waterplants.py onifwarmernow <temp> [-d <device>]
   waterplants.py onifwarmertoday <temp> [-d <device>]
+  waterplants.py status [-d <device>]
+  waterplants.py weather
   waterplants.py (-h | --help)
   waterplants.py --version
 
@@ -20,6 +22,8 @@ import asyncio
 from docopt import docopt
 from kasa import SmartPlug
 from datetime import datetime
+import platform
+
 
 async def get_high_today():
     # declare the client. format defaults to metric system (celcius, km/h, etc.)
@@ -46,6 +50,10 @@ async def get_temp_now():
     # close the wrapper once done
     await client.close()
     return temp
+
+async def print_weather():
+    temp = await get_temp_now()
+    print(f"Temperature now is {temp} C")
 
 async def on_if_warmer_today(threshold: int, device: str):
     print("Getting temperature forecast for today")
@@ -75,8 +83,20 @@ async def off(device: str):
     await p.update()
     await p.turn_off()
 
+async def status(device: str):
+    p = SmartPlug(device)
+    await p.update()
+    if p.is_on:
+        print("Device is on")
+    else:
+        print("Device is off")
+
+
+
 if __name__ == "__main__":
     arguments = docopt(__doc__, version='waterplants V1')
+    if platform.system()=='Windows':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     if arguments["onifwarmernow"]:
         asyncio.run(on_if_warmer_now(int(arguments["<temp>"]), arguments["-d"]))
     elif arguments["onifwarmertoday"]:
@@ -85,3 +105,7 @@ if __name__ == "__main__":
         asyncio.run(on(arguments["-d"]))
     elif arguments["off"]:
         asyncio.run(off(arguments["-d"]))
+    elif arguments["weather"]:
+        asyncio.run(print_weather())
+    elif arguments["status"]:
+        asyncio.run(status(arguments["-d"]))
