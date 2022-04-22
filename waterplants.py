@@ -2,9 +2,10 @@
 
 Usage:
   waterplants.py on [-d <device>]
+  waterplants.py on5min [-d <device>]
   waterplants.py off [-d <device>]
-  waterplants.py onifwarmernow <temp> [-d <device>]
-  waterplants.py onifwarmertoday <temp> [-d <device>]
+  waterplants.py on5minifwarmernow <temp> [-d <device>]
+  waterplants.py on5minifwarmertoday <temp> [-d <device>]
   waterplants.py status [-d <device>]
   waterplants.py weather
   waterplants.py (-h | --help)
@@ -60,14 +61,14 @@ async def on_if_warmer_today(threshold: int, device: str):
     temp = await get_high_today()
     print(f"High today is {temp}, threshold is {threshold}")
     if temp >= threshold:
-        await on(device)
+        await on5min(device)
 
 async def on_if_warmer_now(threshold: int, device: str):
     print("Getting temperature right now")
     temp = await get_temp_now()
     print(f"Temperature now is {temp}, threshold is {threshold}")
     if temp >= threshold:
-        await on(device)
+        await on5min(device)
 
 async def on(device: str):
     print(f"Turning on device {device}")
@@ -75,6 +76,11 @@ async def on(device: str):
 
     await p.update()
     await p.turn_on()
+
+async def on5min(device: str):
+    await on(device)
+    await asyncio.sleep(300)
+    print("Turning off")
 
 async def off(device: str):
     print(f"Turning off device {device}")
@@ -103,6 +109,8 @@ if __name__ == "__main__":
         asyncio.run(on_if_warmer_today(int(arguments["<temp>"]), arguments["-d"]))
     elif arguments["on"]:
         asyncio.run(on(arguments["-d"]))
+    elif arguments["on5min"]:
+        asyncio.run(on5min(arguments["-d"]))
     elif arguments["off"]:
         asyncio.run(off(arguments["-d"]))
     elif arguments["weather"]:
