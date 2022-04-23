@@ -15,7 +15,6 @@ Options:
   -h --help     Show this screen.
   -d <device>   Specify the device [default: HS100]
   --version     Show version.
-  --device
 
 """
 import python_weather
@@ -81,6 +80,7 @@ async def on5min(device: str):
     await on(device)
     await asyncio.sleep(300)
     print("Turning off")
+    await off(device)
 
 async def off(device: str):
     print(f"Turning off device {device}")
