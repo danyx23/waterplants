@@ -74,6 +74,9 @@ async def on(device: str):
     p = SmartPlug(device)
 
     await p.update()
+    await p.turn_off()
+    await asyncio.sleep(5)
+    await p.update()
     await p.turn_on()
 
 async def on5min(device: str):
