@@ -8,14 +8,14 @@ rich = "*"
 docopt = "*"
 toml = "*"
 python-telegram-bot = "*"
-python-weather = "*"
 python-kasa = "*"
 asyncio = "*"
-
+requests = "*"
 
 [dev-packages]
 black = "*"
 rope = "*"
+ipython = "*"
 
 [requires]
 python_version = "3"

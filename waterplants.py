@@ -17,39 +17,23 @@ Options:
   --version     Show version.
 
 """
-import python_weather
 import asyncio
 from docopt import docopt
 from kasa import SmartPlug
 from datetime import datetime
 import platform
-
+import requests
 
 async def get_high_today():
-    # declare the client. format defaults to metric system (celcius, km/h, etc.)
-    client = python_weather.Client()
+    weather = requests.get("https://wttr.in/Berlin?format=j1").json()
 
-    # fetch a weather forecast from a city
-    weather = await client.find("Berlin, Germany")
-
-    today = next(f for f in weather.forecasts if f.date.day == datetime.now().day)
-
-    # close the wrapper once done
-    await client.close()
-    return today.high
+    return weather["weather"][0]["maxtempC"]
 
 async def get_temp_now():
     # declare the client. format defaults to metric system (celcius, km/h, etc.)
-    client = python_weather.Client()
+    weather = requests.get("https://wttr.in/Berlin?format=j1").json()
 
-    # fetch a weather forecast from a city
-    weather = await client.find("Berlin, Germany")
-
-    temp = weather.current.temperature
-
-    # close the wrapper once done
-    await client.close()
-    return temp
+    return weather["current_condition"][0]["temp_C"]
 
 async def print_weather():
     temp = await get_temp_now()
