@@ -27,13 +27,13 @@ import requests
 async def get_high_today():
     weather = requests.get("https://wttr.in/Berlin?format=j1").json()
 
-    return weather["weather"][0]["maxtempC"]
+    return int(weather["weather"][0]["maxtempC"])
 
 async def get_temp_now():
     # declare the client. format defaults to metric system (celcius, km/h, etc.)
     weather = requests.get("https://wttr.in/Berlin?format=j1").json()
 
-    return weather["current_condition"][0]["temp_C"]
+    return int(weather["current_condition"][0]["temp_C"])
 
 async def print_weather():
     temp = await get_temp_now()
