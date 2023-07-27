@@ -23,12 +23,15 @@ from kasa import SmartPlug
 from datetime import datetime
 import platform
 import requests
+from tenacity import *
 
+@retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=1, max=20))
 async def get_high_today():
     weather = requests.get("https://wttr.in/Berlin?format=j1").json()
 
     return int(weather["weather"][0]["maxtempC"])
 
+@retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=1, max=20))
 async def get_temp_now():
     # declare the client. format defaults to metric system (celcius, km/h, etc.)
     weather = requests.get("https://wttr.in/Berlin?format=j1").json()
@@ -85,8 +88,7 @@ async def status(device: str):
         print("Device is off")
 
 
-
-if __name__ == "__main__":
+def main():
     arguments = docopt(__doc__, version='waterplants V1')
     if platform.system()=='Windows':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
@@ -104,3 +106,6 @@ if __name__ == "__main__":
         asyncio.run(print_weather())
     elif arguments["status"]:
         asyncio.run(status(arguments["-d"]))
+
+if __name__ == "__main__":
+    main()

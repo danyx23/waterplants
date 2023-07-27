@@ -11,6 +11,7 @@ python-telegram-bot = "*"
 python-kasa = "*"
 asyncio = "*"
 requests = "*"
+tenacity = "*"
 
 [dev-packages]
 black = "*"
