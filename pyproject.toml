@@ -1,29 +1,33 @@
-[tool.poetry]
+[project]
 name = "waterplants"
 version = "0.1.0"
 description = ""
-authors = ["Daniel Bachler <daniel@danielbachler.de>"]
+authors = [
+    {name = "Daniel Bachler", email = "daniel@danielbachler.de"}
+]
 readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "rich>=13.4.2",
+    "docopt>=0.6.2",
+    "toml>=0.10.2",
+    "python-telegram-bot>=20.4",
+    "python-kasa>=0.5.3",
+    "asyncio>=3.4.3",
+    "requests>=2.31.0",
+    "tenacity>=8.2.2",
+]
 
-[tool.poetry.scripts]
+[project.scripts]
 waterplants = 'waterplants:main'
 
-[tool.poetry.dependencies]
-python = "^3.11"
-rich = "^13.4.2"
-docopt = "^0.6.2"
-toml = "^0.10.2"
-python-telegram-bot = "^20.4"
-python-kasa = "^0.5.3"
-asyncio = "^3.4.3"
-requests = "^2.31.0"
-tenacity = "^8.2.2"
-
-[tool.poetry.group.dev.dependencies]
-black = "^23.7.0"
-rope = "^1.9.0"
-ipython = "^8.14.0"
+[project.optional-dependencies]
+dev = [
+    "black>=23.7.0",
+    "rope>=1.9.0",
+    "ipython>=8.14.0",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=42.0"]
+build-backend = "setuptools.build_meta"
