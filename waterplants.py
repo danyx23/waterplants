@@ -3,6 +3,7 @@
 Usage:
   waterplants.py on [-d <device>]
   waterplants.py on5min [-d <device>]
+  waterplants.py on-x-sec <seconds> [-d <device>]
   waterplants.py off [-d <device>]
   waterplants.py on5minifwarmernow <temp> [-d <device>]
   waterplants.py on5minifwarmertoday <temp> [-d <device>]
@@ -24,6 +25,7 @@ from datetime import datetime
 import platform
 import requests
 from tenacity import *
+
 
 @retry(stop=stop_after_attempt(5), wait=wait_exponential(multiplier=1, min=1, max=20))
 async def get_high_today():
@@ -66,9 +68,21 @@ async def on(device: str):
     await p.update()
     await p.turn_on()
 
+async def on45sec(device: str):
+    await on(device)
+    await asyncio.sleep(40)
+    print("Turning off")
+    await off(device)
+
 async def on5min(device: str):
     await on(device)
     await asyncio.sleep(300)
+    print("Turning off")
+    await off(device)
+
+async def on_x_sec(seconds: int, device: str):
+    await on(device)
+    await asyncio.sleep(seconds)
     print("Turning off")
     await off(device)
 
@@ -100,6 +114,8 @@ def main():
         asyncio.run(on(arguments["-d"]))
     elif arguments["on5min"]:
         asyncio.run(on5min(arguments["-d"]))
+    elif arguments["on-x-sec"]:
+        asyncio.run(on_x_sec(int(arguments["<seconds>"]), arguments["-d"]))
     elif arguments["off"]:
         asyncio.run(off(arguments["-d"]))
     elif arguments["weather"]:

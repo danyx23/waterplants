@@ -16,6 +16,8 @@ dependencies = [
     "asyncio>=3.4.3",
     "requests>=2.31.0",
     "tenacity>=8.2.2",
+    "ipython>=9.2.0",
+    "jupyter>=1.1.1",
 ]
 
 [project.scripts]
